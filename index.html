@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>POLLITOS NOAH</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 20px;
+      background: #ebeff1;
+    }
+    h1 {
+      color: #153e53;
+      text-align: center;
+      font-size: 2.4rem;
+      letter-spacing: 2.5px;
+      margin-bottom: 16px;
+      text-shadow: 2px 2px 0 #dde7ef;
+    }
+    .lotes-div {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .btn-nuevo-lote {
+      background: #1a5a6e;
+      color: #fff;
+      border: none;
+      padding: 10px 19px;
+      border-radius: 10px;
+      font-size: 1.08em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-right: 8px;
+    }
+    .btn-nuevo-lote:hover {
+      background: #04354a;
+    }
+    .lote-selector {
+      font-size:1em;
+      padding:7px 13px;
+      border-radius:6px;
+      margin-left:6px;
+    }
+    .limpiar-div {
+      text-align: right;
+      margin-bottom: 16px;
+      margin-top: -20px;
+    }
+    .btn-limpiar {
+      background: #f05555;
+      color: #fff;
+      border: none;
+      padding: 10px 19px;
+      border-radius: 10px;
+      font-size: 1.08em;
+      font-weight: bold;
+      box-shadow: 0 2px 14px #e66a6a27;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-limpiar:hover {
+      background: #b83737;
+    }
+    .tabbar {
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .tablink {
+      padding: 13px 27px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-size: 19px;
+      border-radius: 18px 18px 0 0;
+      margin-right: 2px;
+      margin-bottom: -3px;
+      font-weight: 600;
+      background: #2e4259;
+      color: #c4e3ec;
+      transition: background 0.3s, color 0.3s;
+      box-shadow: 0 2px 8px #152a2a0e;
+      border-bottom: 2px solid #1a212c;
+    }
+    .tablink.active, .tablink:hover {
+      background: linear-gradient(90deg, #1a5a6e 0%, #075063 100%);
+      color: #fff;
+      border-bottom: 2.5px solid #5db2c2;
+    }
+    .tabcontent {
+      display: none;
+      max-width: 760px;
+      margin: 0 auto 26px auto;
+    }
+    .tabcontent.active { display: block; }
+    table, th, td {
+      border: 1px solid #264f5e;
+      border-collapse: collapse;
+      padding: 11px;
+      font-size: 1.06rem;
+    }
+    th {
+      background: #233b47;
+      color: #c0dae4;
+      font-size: 1.12rem;
+    }
+    .pagado { background: #ddebe3 !important; color:#1a5a6e; }
+    /* INVERSION/GASTO */
+    #inversion {
+      background: linear-gradient(120deg, #1a5a6e 0%, #274755 100%);
+      border-radius: 18px;
+      box-shadow: 0 4px 20px #1a1b3860;
+      padding: 34px 38px 18px 38px;
+      margin-bottom:35px;
+      color: #d2ebe9;
+      border:2px solid #375872;
+    }
+    #inversion h2 {
+      background: transparent;
+      color: #5db2c2;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+    }
+    #inversion input, #inversion button {
+      padding: 8px 13px;
+      border: 1px solid #3b738a;
+      border-radius: 6px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+      font-size: 1rem;
+      outline: none;
+      background: #192f3c;
+      color:#deeaea;
+    }
+    #inversion input::placeholder { color:#7da6ba;}
+    #inversion button {
+      background: #5db2c2;
+      color: #192f3c;
+      border: none;
+      font-weight: bold;
+      letter-spacing: .8px;
+      box-shadow: 0 1px 3px #0002;
+      transition: background 0.2s,color 0.15s;
+    }
+    #inversion button:hover {
+      background: #417790;
+      color: #fff;
+    }
+    #tabla_gastos th { background: #28465a; color: #76bee0;}
+    #tabla_gastos { background: #19323f;}
+    #total_gastos {
+      background: #223a46;
+      color: #7de5c5;
+      border-radius: 8px;
+      padding: 4px 16px;
+      font-weight: bold;
+      margin-left: 6px;
+      border: 1px solid #425e6a;
+      display: inline-block;
+    }
+
+    /* VENTAS  */
+    #ventas {
+      background: linear-gradient(120deg, #304250 0%, #536572 100%);
+      border-radius: 18px;
+      box-shadow: 0 4px 20px #22324478;
+      padding: 34px 38px 18px 38px;
+      margin-bottom:35px;
+      color: #f1f5f7;
+      border:2px solid #455967;
+    }
+    #ventas h2 {
+      background: transparent;
+      color: #9fc8e8;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+    }
+    #ventas input, #ventas button {
+      padding: 8px 13px;
+      border: 1px solid #498daa;
+      border-radius: 6px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+      font-size: 1rem;
+      outline: none;
+      background: #233342;
+      color: #e2efeb;
+    }
+    #ventas input::placeholder { color:#8da8ba;}
+    #ventas button {
+      background: #83b4ce;
+      color: #192f3c;
+      border: none;
+      font-weight: bold;
+      letter-spacing: .8px;
+      box-shadow: 0 1px 3px #0002;
+      transition: background 0.2s,color 0.15s;
+    }
+    #ventas button:hover, #deudores button:hover {
+      background: #349ecb;
+      color: #fff;
+    }
+    #tabla_ventas th { background: #3e5262; color: #93d6f2; }
+    #tabla_ventas { background: #1e2830; }
+    #total_ventas {
+      background: #192a3a;
+      color: #94dafb;
+      border-radius: 8px;
+      padding: 4px 16px;
+      font-weight: bold;
+      margin-left: 6px;
+      border: 1px solid #2c485a;
+      display: inline-block;
+    }
+    /* DEUDORES: verde oscuro y gris */
+    #deudores {
+      background: linear-gradient(120deg,#283d32 0%, #50684a 100%);
+      border-radius: 18px;
+      box-shadow: 0 4px 20px #1939296e;
+      padding: 34px 38px 18px 38px;
+      margin-bottom:35px;
+      color: #e2efe6;
+      border:2px solid #345446;
+    }
+    #deudores h2 {
+      background: transparent;
+      color: #43d39e;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+    }
+    #tabla_deudores th { background: #334d40; color:#87e2b9; }
+    #tabla_deudores { background: #223b2b; }
+    #total_deudas {
+      background: #22382d;
+      color:#6cffad;
+      border-radius: 8px;
+      padding: 4px 16px;
+      font-weight: bold;
+      margin-left: 6px;
+      border: 1px solid #2d4836;
+      display: inline-block;
+    }
+    /* INVENTARIO/RESUMEN */
+    #inventario {
+      background: linear-gradient(120deg,#22313c 0%, #304d5c 100%);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #22384b88;
+      padding: 38px 38px 24px 38px;
+      margin-bottom:35px;
+      color: #aee7e4;
+      border:2.3px solid #4d6e8a;
+    }
+    #inventario h2 {
+      margin-bottom: 16px;
+      color: #29e3ae;
+      font-size: 1.45rem;
+      font-weight: bold;
+      letter-spacing: 1.8px;
+      background: transparent;
+    }
+    #inventario-table {
+      width: 100%;
+      background: #253d4a;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 18px;
+    }
+    #inventario-table td, #inventario-table th {
+      border: none;
+      padding: 10px 15px;
+      color: #fff;
+    }
+    #inventario-table th {
+      text-align: right;
+      font-weight: 600;
+      width: 60%;
+      color: #89ebe7;
+      background: none !important;
+    }
+    #inventario-table td {
+      text-align: left;
+      font-weight: bold;
+      font-size: 1.08rem;
+      color: #29ffcb;
+      background: none !important;
+    }
+    @media (max-width:650px){
+      #inversion, #ventas, #deudores, #inventario {padding:17px 4vw;}
+      table, th, td{font-size: 0.97rem;}
+      h1{font-size:1.3rem;}
+    }
+  </style>
+</head>
+<body>
+  <h1>POLLITOS NOAH</h1>
+
+  <!-- SECCIÓN LOTES -->
+  <div class="lotes-div">
+    <button class="btn-nuevo-lote" onclick="iniciarNuevoLote()">+ Nuevo Lote</button>
+    <label for="menuLotes">Ver lote:</label>
+    <select id="menuLotes" class="lote-selector" onchange="cargarLoteSeleccionado()">
+      <option value="activo">(Lote activo)</option>
+    </select>
+  </div>
+
+  <div class="limpiar-div">
+    <button class="btn-limpiar" onclick="borrarTodo()">🗑️ Borrar todos los datos</button>
+  </div>
+
+  <div class="tabbar">
+    <button class="tablink active" onclick="showTab('inventario')">Inventario</button>
+    <button class="tablink" onclick="showTab('inversion')">Inversión / Gasto</button>
+    <button class="tablink" onclick="showTab('ventas')">Ventas</button>
+    <button class="tablink" onclick="showTab('deudores')">Deudores</button>
+  </div>
+
+  <!-- INVENTARIO/RESUMEN GENERAL -->
+  <div id="inventario" class="tabcontent active">
+    <h2>INVENTARIO / RESUMEN GENERAL</h2>
+    <table id="inventario-table">
+      <tbody>
+        <tr><th>Total invertido (gastos/inversión):</th>     <td id="inv_gastos">--</td></tr>
+        <tr><th>Total ventas (registrado):</th>              <td id="inv_ventas">--</td></tr>
+        <tr><th>Total abonado (pagos parciales):</th>        <td id="inv_abonos">--</td></tr>
+        <tr><th>Total recolectado (pagos completos + abonos):</th> <td id="inv_recolectado">--</td></tr>
+        <tr><th>Saldo pendiente por cobrar:</th>             <td id="inv_pendiente">--</td></tr>
+        <tr><th><span style="color:#45ffb6;">Ganancia bruta (ventas - inversión):</span></th> <td id="inv_ganancia" style="color:#97ffba">--</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:1.1em">Revisa aquí el resultado real de tu esfuerzo: inversión, ventas, cobros, deudas y tu ganancia para tu control.</p>
+  </div>
+
+  <!-- INVERSION -->
+  <div id="inversion" class="tabcontent">
+    <h2>Registrar Inversión/Gasto</h2>
+    <input type="text" id="gasto_nombre" placeholder="Descripción">
+    <input type="number" id="gasto_monto" placeholder="Monto $" step="0.01" min="0">
+    <button onclick="agregarGasto()">Registrar Gasto</button>
+    <table id="tabla_gastos" style="margin-top:18px;">
+      <thead>
+        <tr><th>Descripción</th><th>Monto</th><th>Fecha</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p style="margin-top:14px;"><strong>Total invertido:</strong>
+      <span id="total_gastos">0</span> $
+    </p>
+  </div>
+
+  <!-- VENTAS -->
+  <div id="ventas" class="tabcontent">
+    <h2>Registrar Venta</h2>
+    <input type="text" id="venta_cliente" placeholder="Nombre del cliente">
+    <input type="text" id="venta_descripcion" placeholder="Descripción">
+    <input type="number" id="venta_precio" placeholder="Precio $" min="0" step="0.01">
+    <button onclick="agregarVenta()">Registrar Venta</button>
+    <table id="tabla_ventas" style="margin-top:18px;">
+      <thead>
+        <tr><th>Cliente</th><th>Descripción</th><th>Precio</th><th>Saldo Pendiente</th><th>Abonado</th><th>Fecha</th><th>Pago</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p style="margin-top:14px;"><strong>Total en ventas:</strong> <span id="total_ventas">0</span> $</p>
+  </div>
+
+  <!-- DEUDORES -->
+  <div id="deudores" class="tabcontent">
+    <h2>Clientes que Adeudan</h2>
+    <table id="tabla_deudores">
+      <thead>
+        <tr><th>Cliente</th><th>Descripción</th><th>Deuda</th><th>Abonado</th><th>Pago</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p><strong>Total de deudas:</strong> <span id="total_deudas">0</span> $</p>
+  </div>
+
+  <!-- MODAL ABONO -->
+  <div id="abonoModalBg" class="abono-modal-bg" style="display:none" onclick="cerrarAbono()"></div>
+  <div id="abonoModal" class="abono-modal" style="display:none">
+    <div style="font-size:21px;font-weight:bold;margin-bottom:10px;">
+      Registrar Abono <span style="font-size:24px;">💸</span>
+    </div>
+    <div id="abonoModalInfo" style="margin-bottom:12px;"></div>
+    <input type="number" id="abonoCantidad" min="0" step="0.01" placeholder="Monto abono...">
+    <br>
+    <button onclick="guardarAbono()">OK</button>
+    <button class="cancelar" onclick="cerrarAbono()">Cancelar</button>
+  </div>
+
+  <script>
+    // ===== MULTILOTE LOGIC =====
+    function obtenerLotes() {
+      return JSON.parse(localStorage.getItem('lotes') || '{}');
+    }
+    function guardarLotes(lotes) {
+      localStorage.setItem('lotes', JSON.stringify(lotes));
+    }
+    function iniciarNuevoLote() {
+      let lotes = obtenerLotes();
+      let gastos = JSON.parse(localStorage.getItem('gastos') || '[]');
+      let ventas = JSON.parse(localStorage.getItem('ventas') || '[]');
+      let n = 1;
+      for (; lotes['Lote ' + n]; n++);
+      let nombre = prompt("Nombre para el lote:", "Lote " + n);
+      if (!nombre) return;
+      if (gastos.length > 0 || ventas.length > 0) {
+        lotes[nombre] = { gastos, ventas };
+      }
+      localStorage.setItem('gastos', '[]');
+      localStorage.setItem('ventas', '[]');
+      lotes["activo"] = { gastos: [], ventas: [] };
+      guardarLotes(lotes);
+      cargarMenuLotes();
+      document.getElementById('menuLotes').value = "activo";
+      cargarGastos();
+      cargarVentas();
+      cargarDeudores();
+      cargarInventario();
+      alert("¡Nuevo lote iniciado!");
+    }
+    function cargarMenuLotes() {
+      let lotes = obtenerLotes();
+      let menu = document.getElementById('menuLotes');
+      menu.innerHTML = '<option value="activo">(Lote activo)</option>';
+      for (let nombre in lotes) {
+        if (nombre !== "activo") {
+          menu.innerHTML += `<option value="${nombre}">${nombre}</option>`;
+        }
+      }
+    }
+    function cargarLoteSeleccionado() {
+      let lotes = obtenerLotes();
+      let sel = document.getElementById('menuLotes');
+      let elegido = sel.value;
+      if (elegido === "activo") {
+        cargarGastos();
+        cargarVentas();
+        cargarDeudores();
+        cargarInventario();
+        return;
+      }
+      let lote = lotes[elegido] || {gastos:[], ventas:[]};
+      pintarGastosLote(lote.gastos);
+      pintarVentasLote(lote.ventas);
+      pintarDeudoresLote(lote.ventas);
+      pintarInventarioLote(lote.gastos, lote.ventas);
+    }
+    function pintarGastosLote(gastos) {
+      let tbody = "", total = 0;
+      gastos.forEach(g=>{
+        tbody += `<tr><td>${g.nombre}</td><td>${g.monto}</td><td>${g.fecha}</td></tr>`;
+        total += Number(g.monto);
+      });
+      document.querySelector("#tabla_gastos tbody").innerHTML = tbody;
+      document.getElementById("total_gastos").textContent = total;
+    }
+    function pintarVentasLote(ventas) {
+      let tbody = "", total = 0;
+      ventas.forEach((v)=>{
+        let saldo = v.pagado ? 0 : (Number(v.precio) - (v.abonado||0));
+        tbody += `<tr${v.pagado ? ' class="pagado"' : ''}>
+          <td>${v.cliente}</td>
+          <td>${v.descripcion}</td>
+          <td>${v.precio}</td>
+          <td>${saldo}</td>
+          <td>${v.abonado ? v.abonado : 0}</td>
+          <td>${v.fecha}</td>
+          <td>${v.pagado ? "Pagado" : "--"}</td>
+        </tr>`;
+        total += Number(v.precio);
+      });
+      document.querySelector("#tabla_ventas tbody").innerHTML = tbody;
+      document.getElementById("total_ventas").textContent = total;
+    }
+    function pintarDeudoresLote(ventas) {
+      let tbody = "", total = 0;
+      ventas.forEach((v)=>{
+        if(!v.pagado){
+          let saldo = Number(v.precio) - (v.abonado||0);
+          tbody += `<tr>
+            <td>${v.cliente}</td>
+            <td>${v.descripcion}</td>
+            <td>${saldo}</td>
+            <td>${v.abonado ? v.abonado : 0}</td>
+            <td>--</td>
+          </tr>`;
+          total += saldo;
+        }
+      });
+      document.querySelector("#tabla_deudores tbody").innerHTML = tbody;
+      document.getElementById("total_deudas").textContent = total;
+    }
+    function pintarInventarioLote(gastos, ventas) {
+      let totalGastos = gastos.reduce((acc, g) => acc + Number(g.monto), 0);
+      let totalVentas = ventas.reduce((acc, v) => acc + Number(v.precio), 0);
+      let totalAbonado = ventas.reduce((acc, v) => acc + (Number(v.abonado||0)), 0);
+      let totalRecolectado = ventas.reduce((acc, v) => acc +
+        (v.pagado ? Number(v.precio) : (Number(v.abonado)||0)), 0);
+      let totalPendiente = ventas.reduce((acc, v) =>
+        acc + (v.pagado ? 0 : (Number(v.precio)-(Number(v.abonado)||0)))
+      , 0);
+      let ganancia = totalVentas - totalGastos;
+      document.getElementById('inv_gastos').textContent      = "$" + totalGastos.toFixed(2);
+      document.getElementById('inv_ventas').textContent      = "$" + totalVentas.toFixed(2);
+      document.getElementById('inv_abonos').textContent      = "$" + totalAbonado.toFixed(2);
+      document.getElementById('inv_recolectado').textContent = "$" + totalRecolectado.toFixed(2);
+      document.getElementById('inv_pendiente').textContent   = "$" + totalPendiente.toFixed(2);
+      let elemGanancia =  document.getElementById('inv_ganancia');
+      elemGanancia.textContent = "$" + ganancia.toFixed(2);
+      elemGanancia.style.color = (ganancia>=0) ? "#29ffcb" : "#ff4343";
+    }
+    function cargarGastos() {
+      if (document.getElementById("menuLotes").value !== "activo") return;
+      let gastos = JSON.parse(localStorage.getItem('gastos')||'[]');
+      pintarGastosLote(gastos);
+    }
+    function cargarVentas() {
+      if (document.getElementById("menuLotes").value !== "activo") return;
+      let ventas = JSON.parse(localStorage.getItem('ventas')||'[]');
+      pintarVentasLote(ventas);
+    }
+    function cargarDeudores() {
+      if (document.getElementById("menuLotes").value !== "activo") return;
+      let ventas = JSON.parse(localStorage.getItem('ventas')||'[]');
+      pintarDeudoresLote(ventas);
+    }
+    function cargarInventario() {
+      if (document.getElementById("menuLotes").value !== "activo") return;
+      let gastos = JSON.parse(localStorage.getItem('gastos')||'[]');
+      let ventas = JSON.parse(localStorage.getItem('ventas')||'[]');
+      pintarInventarioLote(gastos, ventas);
+    }
+    // App lógica original
+    let abonoIdx = null;
+    function showTab(tabId) {
+      document.querySelectorAll('.tabcontent').forEach(e=>e.classList.remove('active'));
+      document.querySelectorAll('.tablink').forEach(e=>e.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      let idx = ['inventario','inversion', 'ventas', 'deudores'].indexOf(tabId);
+      document.querySelectorAll('.tablink')[idx].classList.add('active');
+      if(tabId === "inventario") cargarInventario();
+    }
+    function agregarGasto() {
+      if (document.getElementById("menuLotes").value !== "activo") return alert("No puedes modificar lotes antiguos.");
+      let nombre = document.getElementById("gasto_nombre").value;
+      let monto = document.getElementById("gasto_monto").value;
+      if(!nombre || !monto) return alert("Complete todos los campos del gasto");
+      let gastos = JSON.parse(localStorage.getItem('gastos')||'[]');
+      gastos.push({nombre, monto, fecha: new Date().toLocaleDateString()});
+      localStorage.setItem('gastos', JSON.stringify(gastos));
+      document.getElementById("gasto_nombre").value = "";
+      document.getElementById("gasto_monto").value = "";
+      cargarGastos(); cargarInventario();
+    }
+    function agregarVenta() {
+      if (document.getElementById("menuLotes").value !== "activo") return alert("No puedes modificar lotes antiguos.");
+      let cliente = document.getElementById("venta_cliente").value;
+      let descripcion = document.getElementById("venta_descripcion").value;
+      let precio = document.getElementById("venta_precio").value;
+      if(!cliente || !descripcion || !precio)
+        return alert("Complete nombre, descripción y precio");
+      let ventas = JSON.parse(localStorage.getItem('ventas')||'[]');
+      ventas.push({cliente, descripcion, precio, abonado:0, pagado:false, fecha: new Date().toLocaleDateString()});
+      localStorage.setItem('ventas', JSON.stringify(ventas));
+      document.getElementById("venta_cliente").value = "";
+      document.getElementById("venta_descripcion").value = "";
+      document.getElementById("venta_precio").value = "";
+      cargarVentas(); cargarDeudores(); cargarInventario();
+    }
+    function pagarVenta(idx) {
+      if (document.getElementById("menuLotes").value !== "activo") return alert("No puedes modificar lotes antiguos.");
+      let ventas = JSON.parse(localStorage.getItem('ventas')||'[]');
+      ventas[idx].pagado = true;
+      localStorage.setItem('ventas', JSON.stringify(ventas));
+      cargarVentas();
+      cargarDeudores();
+      cargarInventario();
+    }
+    function abrirAbono(idx) {
+      if (document.getElementById("menuLotes").value !== "activo") return alert("No puedes modificar lotes antiguos.");
+      abonoIdx = idx;
+      let ventas = JSON.parse(localStorage.getItem('ventas')||'[]');
+      const v = ventas[idx];
+      const restante = (Number(v.precio) - (v.abonado||0));
+      document.getElementById("abonoModalInfo").innerHTML =
+        "<b>" + v.cliente + "</b><br>"
+        + "Pendiente: $" + restante;
+      document.getElementById("abonoCantidad").max = restante;
+      document.getElementById("abonoCantidad").value = "";
+      document.getElementById("abonoModalBg").style.display = "block";
+      document.getElementById("abonoModal").style.display = "block";
+      document.getElementById("abonoCantidad").focus();
+    }
+    function cerrarAbono() {
+      abonoIdx = null;
+      document.getElementById("abonoModalBg").style.display="none";
+      document.getElementById("abonoModal").style.display="none";
+    }
+    function guardarAbono() {
+      let monto = parseFloat(document.getElementById("abonoCantidad").value);
+      if(isNaN(monto) || monto<=0) return alert("Ingrese un abono válido.");
+      let ventas = JSON.parse(localStorage.getItem('ventas')||'[]');
+      let v = ventas[abonoIdx];
+      let pendiente = Number(v.precio) - (v.abonado||0);
+      if(monto > pendiente) return alert("El abono no puede ser mayor al pendiente.");
+      v.abonado = (v.abonado||0) + monto;
+      if(Number(v.abonado) >= Number(v.precio)){
+        v.abonado = Number(v.precio);
+        v.pagado = true;
+      }
+      localStorage.setItem('ventas', JSON.stringify(ventas));
+      cerrarAbono();
+      cargarVentas();
+      cargarDeudores();
+      cargarInventario();
+    }
+    function borrarTodo(){
+      if(confirm("¿Seguro que deseas borrar TODOS los registros? ¡Esta acción no se puede deshacer!")){
+        localStorage.removeItem('gastos');
+        localStorage.removeItem('ventas');
+        localStorage.removeItem('lotes');
+        cargarGastos();
+        cargarVentas();
+        cargarDeudores();
+        cargarInventario();
+        cargarMenuLotes();
+        alert("¡Datos borrados y aplicación reiniciada!");
+      }
+    }
+    cargarMenuLotes();
+    cargarGastos();
+    cargarVentas();
+    cargarDeudores();
+    cargarInventario();
+  </script>
+</body>
+</html>
